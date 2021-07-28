@@ -7,6 +7,8 @@ class CategoriesController < ApplicationController
     @category = Category.create(category_params)
   end
 
+  def show; end
+
   private
 
   def category_params
