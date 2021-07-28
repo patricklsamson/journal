@@ -7,7 +7,8 @@ RSpec.describe Category, type: :model do
     end
 
     it 'has one after adding one' do
-      Category.create
+      Category.create(title: 'Programming',
+                      details: 'Coding tasks for the day')
       expect(Category.count).to eq 1
     end
   end
