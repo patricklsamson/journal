@@ -18,7 +18,7 @@ RSpec.describe "CreatingCategories", type: :system do
 
     category = Category.order('id').last
     expect(category.title).to eq('Programming')
-    expect(category.description).to eq('Coding tasks for the day')
+    expect(category.details).to eq('Coding tasks for the day')
   end
 
   # pending "add some scenarios (or delete) #{__FILE__}"
