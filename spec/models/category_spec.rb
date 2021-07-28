@@ -13,5 +13,32 @@ RSpec.describe Category, type: :model do
     end
   end
 
+  context 'validation test' do
+    subject do
+      described_class.new(title: 'Programming',
+                          details: 'Coding tasks for the day')
+    end
+
+    it 'is valid with valid attributes' do
+      expect(subject).to be_valid
+    end
+
+    it 'is not valid without a title' do
+      subject.title = nil
+      expect(subject).to_not be_valid
+    end
+
+    it 'is valid without details' do
+      subject.details = nil
+      expect(subject).to be_valid
+    end
+
+    it 'should have a unique title' do
+      Category.create(title: 'Programming')
+      another = Category.create(title: 'Programming')
+      expect(another).to_not be_valid
+    end
+  end
+
   # pending "add some examples to (or delete) #{__FILE__}"
 end
