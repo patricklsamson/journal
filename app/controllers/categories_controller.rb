@@ -3,5 +3,7 @@ class CategoriesController < ApplicationController
     @category = Category.new
   end
 
-  def create; end
+  def create
+    @category = Category.new(params[:category])
+  end
 end
