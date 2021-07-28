@@ -42,9 +42,9 @@ RSpec.describe "EditingCategories", type: :system do
     fill_in 'Details', with: 'Coding tasks for the day edited'
     click_on 'Update Category'
 
-    expect(page).to have_content('Programming Edited')
+    expect(page).to have_content('Coding tasks for the day edited')
     category = Category.find(id)
-    expect(category.details).to eq('Programming Edited')
+    expect(category.details).to eq('Coding tasks for the day edited')
   end
 
   # pending "add some scenarios (or delete) #{__FILE__}"
