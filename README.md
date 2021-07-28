@@ -1,4 +1,8 @@
-# README
+# Journal
+
+This rails project is a part of my compilation of Avion School Batch 8 Activities. It is focused on performing Test Driven Development(TDD) on Ruby on Rails using RSpec. It is deployed on Heroku and can be accessed through this [link]().
+
+<!-- # README
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
@@ -21,4 +25,4 @@ Things you may want to cover:
 
 * Deployment instructions
 
-* ...
+* ... -->
