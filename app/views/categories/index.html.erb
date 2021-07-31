@@ -1,10 +1,10 @@
 <h1>Journal</h1>
 
-<div>
+<ul class="list-group">
   <% @categories.each do |category| %>
-    <%= link_to category.title, category %>
+    <li class="list-group-item"><%= link_to category.title, category %> - <%= category.details %></li>
   <% end %>
-</div>
+</ul>
 
 <div>
   <%= link_to 'New Category', new_category_path %>
