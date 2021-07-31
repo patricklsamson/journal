@@ -9,6 +9,12 @@ class CategoriesController < ApplicationController
 
   def create
     @category = Category.create(category_params)
+
+    if @category.save
+      redirect_to @category
+    else
+      render :new
+    end
   end
 
   def show
@@ -27,6 +33,13 @@ class CategoriesController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    @category = Category.find(params[:id])
+    @category.destroy
+
+    redirect_to root_path
   end
 
   private
