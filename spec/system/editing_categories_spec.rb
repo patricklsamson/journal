@@ -1,14 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe 'EditingCategories', type: :system do
+  before do
+    driven_by(:rack_test)
+  end
+
   let(:click_new_category) { find('a[href="/categories/new"]').click }
   let(:click_create_category) { find('input[type="submit"]').click }
   let(:id) { Category.find_by(title: 'Category Title').id }
   let(:click_edit_category) { find("a[href='/categories/#{id}/edit']").click }
 
   before :each do
-    driven_by(:rack_test)
-
     visit root_path
     click_new_category
 
