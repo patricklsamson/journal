@@ -8,20 +8,15 @@ RSpec.describe 'ViewingCategories', type: :system do
   let(:click_new_category) { find('a[href="/categories/new"]').click }
   let(:click_create_category) { find('input[type="submit"]').click }
   let(:category_id) { Category.find_by(title: 'Category Title').id }
-  let(:click_show_category) { find("a[href='/categories/#{id}']").click }
+  let(:click_show_category) { find("a[href='/categories/#{category_id}']").click }
 
   it 'views a category' do
     visit root_path
     click_new_category
 
-    expect(page).to have_current_path(new_category_path)
     fill_in 'Title', with: 'Category Title'
     fill_in 'Details', with: 'Category Details'
     click_create_category
-
-    expect(page).to have_current_path(category_path(category_id))
-    expect(page).to have_content('Category Title')
-    expect(page).to have_content('Category Details')
 
     visit root_path
     click_show_category
