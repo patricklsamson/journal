@@ -6,15 +6,11 @@ RSpec.describe Category, type: :model do
                         details: 'Category Details')
   end
 
-  let(:attributes) do
-    {
-      title: subject.title,
-      details: subject.details
-    }
-  end
-
   let(:category_count) { Category.count }
-  let(:category_create) { Category.create(attributes) }
+
+  let(:category_create) do
+    Category.create(title: subject.title, details: subject.details)
+  end
 
   context 'when initialized' do
     it 'counts to zero to begin with' do
@@ -27,22 +23,15 @@ RSpec.describe Category, type: :model do
     end
   end
 
-  context 'when all attributes are present' do
+  context 'when all attributes are valid' do
     it 'does validate' do
       expect(subject).to be_valid
     end
   end
 
-  context 'without a title' do
+  context 'when title is not present' do
     it 'does not validate' do
-      subject.title = nil
-      expect(subject).to_not be_valid
-    end
-  end
-
-  context 'without details' do
-    it 'does not validate' do
-      subject.details = nil
+      subject.title = nil || ''
       expect(subject).to_not be_valid
     end
   end
@@ -50,8 +39,15 @@ RSpec.describe Category, type: :model do
   context 'when title is not unique' do
     it 'does not validate' do
       category_create
-      another = Category.create(attributes)
-      expect(another).to_not be_valid
+      subject.title = 'Category Title'
+      expect(subject).to_not be_valid
+    end
+  end
+
+  context 'when details is not present' do
+    it 'does not validate' do
+      subject.details = nil
+      expect(subject).to_not be_valid
     end
   end
 
