@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe 'CreatingCategories', type: :system do
-  before :each do
+  before do
     driven_by(:rack_test)
+  end
 
+  before :each do
     visit root_path
     click_new_category
 
