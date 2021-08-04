@@ -12,6 +12,8 @@ RSpec.describe Category, type: :model do
     Category.create(title: subject.title, details: subject.details)
   end
 
+  let(:category_on_tasks) { Category.reflect_on_association(:tasks).macro }
+
   context 'when initialized' do
     it 'counts to zero to begin with' do
       expect(category_count).to eq 0
@@ -45,16 +47,15 @@ RSpec.describe Category, type: :model do
   end
 
   context 'when details is not present' do
-    it 'does not validate' do
+    it 'does validate' do
       subject.details = nil
-      expect(subject).to_not be_valid
+      expect(subject).to be_valid
     end
   end
 
-  context 'when details is less than 10 characters' do
-    it 'does not validate' do
-      subject.details = 'A' * 9
-      expect(subject).to_not be_valid
+  context 'when associated' do
+    it 'has many tasks' do
+      expect(category_on_tasks).to eq :has_many
     end
   end
 
