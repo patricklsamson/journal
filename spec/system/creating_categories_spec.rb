@@ -1,8 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe 'CreatingCategories', type: :system do
-  before do
+  before :each do
     driven_by(:rack_test)
+
+    visit root_path
+    click_new_category
+
+    expect(page).to have_current_path(new_category_path)
   end
 
   let(:click_new_category) { find('a[href="/categories/new"]').click }
@@ -12,10 +17,6 @@ RSpec.describe 'CreatingCategories', type: :system do
   let(:category) { Category.find_by(title: 'Category Title') }
 
   it 'creates a category' do
-    visit root_path
-    click_new_category
-
-    expect(page).to have_current_path(new_category_path)
     fill_in 'Title', with: 'Category Title'
     fill_in 'Details', with: 'Category Details'
     click_create_category
@@ -27,6 +28,20 @@ RSpec.describe 'CreatingCategories', type: :system do
     expect(category_count).to eq 1
     expect(category.title).to eq('Category Title')
     expect(category.details).to eq('Category Details')
+  end
+
+  context 'when invalid' do
+    it 'raises an error' do
+      fill_in 'Title', with: ''
+      fill_in 'Details', with: ''
+      click_create_category
+
+      expect(page).to have_current_path(categories_path)
+      expect(page).to have_content('blank')
+      expect(page).to have_content('minimum')
+
+      expect(category_count).to eq 0
+    end
   end
 
   # pending "add some scenarios (or delete) #{__FILE__}"
