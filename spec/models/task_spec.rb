@@ -35,14 +35,14 @@ RSpec.describe Task, type: :model do
     end
   end
 
-  context 'when all attributes are valid' do
+  context 'with valid attributes' do
     it 'does validate' do
       category_create
       expect(subject).to be_valid
     end
   end
 
-  context 'when details is not present' do
+  context 'without details' do
     it 'does not validate' do
       subject.details = nil
       expect(subject).to_not be_valid
@@ -64,7 +64,7 @@ RSpec.describe Task, type: :model do
     end
   end
 
-  context 'when associated' do
+  context 'with associations' do
     it 'belongs to a category' do
       expect(task_on_category).to eq :belongs_to
     end
