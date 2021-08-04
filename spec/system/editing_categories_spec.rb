@@ -7,7 +7,7 @@ RSpec.describe 'EditingCategories', type: :system do
 
   let(:click_new_category) { find('a[href="/categories/new"]').click }
   let(:click_create_category) { find('input[type="submit"]').click }
-  let(:id) { Category.find_by(title: 'Category Title').id }
+  let(:category_id) { Category.find_by(title: 'Category Title').id }
   let(:click_edit_category) { find("a[href='/categories/#{id}/edit']").click }
 
   before :each do
@@ -19,12 +19,12 @@ RSpec.describe 'EditingCategories', type: :system do
     fill_in 'Details', with: 'Category Details'
     click_create_category
 
-    expect(page).to have_current_path(category_path(id))
+    expect(page).to have_current_path(category_path(category_id))
     expect(page).to have_content('Category Title')
     expect(page).to have_content('Category Details')
     click_edit_category
 
-    expect(page).to have_current_path(edit_category_path(id))
+    expect(page).to have_current_path(edit_category_path(category_id))
   end
 
   let(:click_update_category) { find('input[type="submit"]').click }
@@ -37,7 +37,7 @@ RSpec.describe 'EditingCategories', type: :system do
     fill_in 'Details', with: 'Category Details Edited'
     click_update_category
 
-    expect(page).to have_current_path(category_path(id))
+    expect(page).to have_current_path(category_path(category_id))
     expect(page).to have_content('Category Title Edited')
     expect(page).to have_content('Category Details Edited')
 
@@ -52,7 +52,7 @@ RSpec.describe 'EditingCategories', type: :system do
       fill_in 'Details', with: ''
       click_update_category
 
-      expect(page).to have_current_path(category_path(id))
+      expect(page).to have_current_path(category_path(category_id))
       expect(page).to have_content('blank')
       expect(page).to have_content('minimum')
 
