@@ -9,7 +9,8 @@ RSpec.describe Category, type: :model do
   let(:category_count) { Category.count }
 
   let(:category_create) do
-    Category.create(title: subject.title, details: subject.details)
+    Category.create(title: subject.title,
+                    details: subject.details)
   end
 
   let(:category_on_tasks) { Category.reflect_on_association(:tasks).macro }
