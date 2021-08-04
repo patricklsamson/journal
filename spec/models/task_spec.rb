@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Task, type: :model do
   let(:category_create) do
-    Category.create(title: 'Category Title', details: 'Category Details')
+    Category.create(title: 'Category Title',
+                    details: 'Category Details')
   end
 
   before :each do
@@ -10,13 +11,15 @@ RSpec.describe Task, type: :model do
   end
 
   subject do
-    described_class.new(details: 'Task Details', category_id: category_create.id)
+    described_class.new(details: 'Task Details',
+                        category_id: category_create.id)
   end
 
   let(:task_count) { Task.count }
 
   let(:task_create) do
-    Task.create(details: subject.details, category_id: subject.category_id)
+    Task.create(details: subject.details,
+                category_id: subject.category_id)
   end
 
   let(:task_on_category) { Task.reflect_on_association(:category).macro }
