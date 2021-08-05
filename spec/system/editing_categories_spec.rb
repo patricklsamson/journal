@@ -51,6 +51,7 @@ RSpec.describe 'EditingCategories', type: :system do
   context 'with title and without details' do
     it 'edits a category' do
       fill_in 'Title', with: 'Category Title Edited'
+      fill_in 'Details', with: ''
       click_update_category
 
       expect(page).to have_current_path(category_path(category_id))
@@ -64,6 +65,8 @@ RSpec.describe 'EditingCategories', type: :system do
 
   context 'without title and details' do
     before :each do
+      fill_in 'Title', with: ''
+      fill_in 'Details', with: ''
       click_update_category
       expect(page).to have_current_path(category_path(category_id))
     end
@@ -81,6 +84,7 @@ RSpec.describe 'EditingCategories', type: :system do
 
   context 'without title and with details' do
     before :each do
+      fill_in 'Title', with: ''
       fill_in 'Details', with: 'Category Details Edited'
       click_update_category
       expect(page).to have_current_path(category_path(category_id))
