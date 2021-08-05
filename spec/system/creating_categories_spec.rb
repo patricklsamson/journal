@@ -62,7 +62,7 @@ RSpec.describe 'CreatingCategories', type: :system do
 
     it 'does not create a category' do
       expect(category_count).to eq 0
-      expect(category).to eq nil || ''
+      expect(category).to eq nil
     end
   end
 
@@ -79,7 +79,7 @@ RSpec.describe 'CreatingCategories', type: :system do
 
     it 'does not create a category' do
       expect(category_count).to eq 0
-      expect(category).to eq nil || ''
+      expect(category).to eq nil
     end
   end
 
