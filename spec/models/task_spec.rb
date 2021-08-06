@@ -6,23 +6,27 @@ RSpec.describe Task, type: :model do
                     details: 'Category Details')
   end
 
+  let(:task_count) { Task.count }
+  let(:task_on_category) { Task.reflect_on_association(:category).macro }
+
+  let(:task_create) do
+    Task.create(details: subject.details,
+                priority: subject.priority,
+                category_id: subject.category_id)
+  end
+
+  let(:date_today) { Date.today }
+  let(:date_yesterday) { date_today - 1 }
+
   before :each do
     category_create
   end
 
   subject do
     described_class.new(details: 'Task Details',
+                        priority: date_today,
                         category_id: category_create.id)
   end
-
-  let(:task_count) { Task.count }
-
-  let(:task_create) do
-    Task.create(details: subject.details,
-                category_id: subject.category_id)
-  end
-
-  let(:task_on_category) { Task.reflect_on_association(:category).macro }
 
   context 'when initialized' do
     it 'counts to zero to begin with' do
@@ -37,7 +41,6 @@ RSpec.describe Task, type: :model do
 
   context 'with valid attributes' do
     it 'does validate' do
-      category_create
       expect(subject).to be_valid
     end
   end
@@ -60,6 +63,20 @@ RSpec.describe Task, type: :model do
   context 'when details is less than 10 characters' do
     it 'does not validate' do
       subject.details = 'A' * 9
+      expect(subject).to_not be_valid
+    end
+  end
+
+  context 'without priority date' do
+    it 'does validate' do
+      subject.priority = nil
+      expect(subject).to be_valid
+    end
+  end
+
+  context 'when priority date is in the past' do
+    it 'does not validate' do
+      subject.priority = date_yesterday
       expect(subject).to_not be_valid
     end
   end
