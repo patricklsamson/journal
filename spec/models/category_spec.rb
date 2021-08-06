@@ -1,19 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe Category, type: :model do
-  subject do
-    described_class.new(title: 'Category Title',
-                        details: 'Category Details')
-  end
-
   let(:category_count) { Category.count }
+  let(:category_on_tasks) { Category.reflect_on_association(:tasks).macro }
 
   let(:category_create) do
     Category.create(title: subject.title,
                     details: subject.details)
   end
 
-  let(:category_on_tasks) { Category.reflect_on_association(:tasks).macro }
+  subject do
+    described_class.new(title: 'Category Title',
+                        details: 'Category Details')
+  end
 
   context 'when initialized' do
     it 'counts to zero to begin with' do
