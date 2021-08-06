@@ -4,4 +4,10 @@ class Task < ApplicationRecord
   validates :details, presence: true,
                       uniqueness: true,
                       length: { minimum: 10 }
+
+  validate :priority_date_cannot_be_in_the_past
+
+  def priority_date_cannot_be_in_the_past
+    errors.add(:prioriity, "can't be in the past") if priority.present? && priority < Date.today
+  end
 end
