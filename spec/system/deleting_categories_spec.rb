@@ -7,9 +7,11 @@ RSpec.describe 'DeletingCategories', type: :system do
 
   let(:click_new_category) { find('a[href="/categories/new"]').click }
   let(:click_create_category) { find('input[type="submit"]').click }
-  let(:category_id) { Category.find_by(title: 'Category Title').id }
   let(:click_destroy_category) { find("a[href='/categories/#{category_id}']").click }
+
+  let(:category_id) { Category.find_by(title: 'Category Title').id }
   let(:category_count) { Category.count }
+
   let(:category) { Category.find_by(title: 'Category Title') }
 
   it 'deletes a category' do
