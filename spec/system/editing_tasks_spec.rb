@@ -41,7 +41,7 @@ RSpec.describe 'EditingTasks', type: :system do
     click_edit_task
   end
 
-  it 'redirects to edit category task path' do
+  it 'redirects to form' do
     expect(page).to have_current_path(edit_category_task_path(category_id, task_id))
   end
 
