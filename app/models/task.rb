@@ -8,6 +8,6 @@ class Task < ApplicationRecord
   validate :priority_date_cannot_be_in_the_past
 
   def priority_date_cannot_be_in_the_past
-    errors.add(:prioriity, "can't be in the past") if priority.present? && priority < Date.today
+    errors.add(:priority, "can't be in the past") if priority.present? && priority < Date.today
   end
 end
