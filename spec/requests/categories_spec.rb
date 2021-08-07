@@ -27,8 +27,11 @@ RSpec.describe 'Categories', type: :request do
   let(:category_count) { Category.count }
 
   describe 'GET /index' do
-    it 'responds successfully' do
+    before do
       get categories_path
+    end
+
+    it 'responds successfully' do
       expect(response).to be_successful
     end
 
@@ -36,22 +39,31 @@ RSpec.describe 'Categories', type: :request do
   end
 
   describe 'GET /show' do
-    it 'responds successfully' do
+    before do
       get category_path(subject)
+    end
+
+    it 'responds successfully' do
       expect(response).to be_successful
     end
   end
 
   describe 'GET /new' do
-    it 'responds successfully' do
+    before do
       get new_category_path
+    end
+
+    it 'responds successfully' do
       expect(response).to be_successful
     end
   end
 
   describe 'GET /edit' do
-    it 'responds successfully' do
+    before do
       get edit_category_path(subject)
+    end
+
+    it 'responds successfully' do
       expect(response).to be_successful
     end
   end
@@ -88,25 +100,32 @@ RSpec.describe 'Categories', type: :request do
 
   describe 'PATCH /update' do
     context 'when valid' do
-      it 'redirects to itself' do
+      before do
         patch category_path(subject), params: { category: new_attributes }
-        expect(category_count).to eq 1
+      end
+
+      it 'redirects to itself' do
         expect(response).to redirect_to(category_path(subject))
       end
     end
 
     context 'when invalid' do
-      it 'responds successfully' do
+      before do
         patch category_path(subject), params: { category: invalid_attributes }
-        expect(category_count).to eq 1
+      end
+
+      it 'responds successfully' do
         expect(response).to be_successful
       end
     end
   end
 
   describe 'DELETE /destroy' do
-    it 'redirects to root path' do
+    before do
       delete category_path(subject)
+    end
+
+    it 'redirects to root path' do
       expect(category_count).to eq 0
       expect(response).to redirect_to(root_path)
     end
