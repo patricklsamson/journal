@@ -5,31 +5,52 @@ RSpec.describe 'ViewingCategories', type: :system do
     driven_by(:rack_test)
   end
 
-  let(:click_new_category) { find('a[href="/categories/new"]').click }
-  let(:click_create_category) { find('input[type="submit"]').click }
-  let(:click_show_category) { find("a[href='/categories/#{category_id}']").click }
-
+  let(:category_create) { Category.create(title: 'Category Title', details: 'Category Details') }
   let(:category_id) { Category.find_by(title: 'Category Title').id }
 
-  before :each do
-    visit root_path
-    click_new_category
+  let(:click_show_category) { find("a[href='/categories/#{category_id}']").click }
 
-    fill_in 'Title', with: 'Category Title'
-    fill_in 'Details', with: 'Category Details'
-    click_create_category
+  context 'when navigating in page of all categories' do
+    context 'when there is no category yet' do
+      before do
+        visit categories_path
+      end
 
-    visit root_path
-    click_show_category
-  end
+      it 'shows "create" message' do
+        expect(page).to have_content('Create a new category now!')
+      end
+    end
 
-  it 'redirects to the category' do
-    expect(page).to have_current_path(category_path(category_id))
-  end
+    context 'when a category was created' do
+      before :each do
+        category_create
+        visit categories_path
+      end
 
-  it 'renders page with its contents' do
-    expect(page).to have_content('Category Title')
-    expect(page).to have_content('Category Details')
+      it 'shows created category' do
+        expect(page).to have_content('Category Title')
+        expect(page).to have_content('Category Details')
+      end
+
+      it 'does not show "create" message' do
+        expect(page).to_not have_content('Create a new category now!')
+      end
+
+      context 'when viewing that category created' do
+        before :each do
+          click_show_category
+        end
+
+        it 'goes to the category' do
+          expect(page).to have_current_path(category_path(category_id))
+        end
+
+        it 'renders page with its contents' do
+          expect(page).to have_content('Category Title')
+          expect(page).to have_content('Category Details')
+        end
+      end
+    end
   end
 
   # pending "add some scenarios (or delete) #{__FILE__}"
