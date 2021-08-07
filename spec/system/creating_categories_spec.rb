@@ -54,8 +54,8 @@ RSpec.describe 'CreatingCategories', type: :system do
     end
 
     it 'does not create a category' do
-      expect(category_count).to eq 0
       expect(category).to eq nil
+      expect(category_count).to eq 0
     end
 
     it 'redirects back to form' do
