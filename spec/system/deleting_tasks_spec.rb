@@ -3,11 +3,6 @@ require 'rails_helper'
 RSpec.describe 'DeletingTasks', type: :system do
   before do
     driven_by(:rack_test)
-
-    category_create
-    task_create
-
-    visit category_path(category_id)
   end
 
   let(:date_today) { Date.today }
@@ -22,6 +17,13 @@ RSpec.describe 'DeletingTasks', type: :system do
 
   let(:click_destroy_task) { find("a[href='/categories/#{category_id}/tasks/#{task_id}']").click }
 
+  before :each do
+    category_create
+    task_create
+
+    visit category_path(category_id)
+  end
+
   context 'when task was created within its category' do
     it 'redirects to same page' do
       expect(page).to have_current_path(category_path(category_id))
@@ -29,11 +31,13 @@ RSpec.describe 'DeletingTasks', type: :system do
   end
 
   context 'with that task can be deleted' do
-    it 'deletes the task' do
+    before do
       click_destroy_task
+    end
 
-      expect(task_count).to eq 0
+    it 'deletes the task' do
       expect(task_deleted).to eq nil
+      expect(task_count).to eq 0
     end
   end
 
