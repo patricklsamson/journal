@@ -11,9 +11,13 @@ RSpec.describe 'ViewingCategories', type: :system do
   let(:click_show_category) { find("a[href='/categories/#{category_id}']").click }
 
   context 'when navigating in page of all categories' do
-    context 'when there is no category yet' do
+    context 'when there are no categories yet' do
       before do
         visit categories_path
+      end
+
+      it 'shows heading' do
+        expect(page).to have_content('Categories')
       end
 
       it 'shows "create" message' do
