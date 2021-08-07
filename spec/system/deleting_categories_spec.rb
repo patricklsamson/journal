@@ -27,8 +27,8 @@ RSpec.describe 'DeletingCategories', type: :system do
     end
 
     it 'deletes the category' do
-      expect(category_count).to eq 0
       expect(category_deleted).to eq nil
+      expect(category_count).to eq 0
     end
   end
 
