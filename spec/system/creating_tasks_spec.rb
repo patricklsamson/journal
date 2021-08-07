@@ -97,7 +97,9 @@ RSpec.describe 'CreatingTasks', type: :system do
 
     context 'with details blank' do
       it 'renders page without changes' do
-        expect(page).to_not have_content('Task Details')
+        within('#overdue-wrap') { expect(page).to have_content('Nothing else here yet.') }
+        within('#today-wrap') { expect(page).to have_content('Nothing else here yet.') }
+        within('#future-wrap') { expect(page).to have_content('Nothing else here yet.') }
       end
     end
   end
