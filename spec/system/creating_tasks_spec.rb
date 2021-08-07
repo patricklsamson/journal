@@ -87,8 +87,8 @@ RSpec.describe 'CreatingTasks', type: :system do
     end
 
     it 'does not create a task' do
-      expect(task_count).to eq 0
       expect(task).to eq nil
+      expect(task_count).to eq 0
     end
 
     it 'redirects to same page' do
