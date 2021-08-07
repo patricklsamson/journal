@@ -1,5 +1,27 @@
 <h1>Journal</h1>
 
+<div id="today-wrap">
+  <h2>Tasks for Today</h2>
+  <p><%= 'No tasks for today.' unless @categories.find { |c| c.tasks.find { |t| t.priority == Date.today} } %></p>
+
+  <% @categories.each do |category| %>
+    <h3><%= category.title %></h3>
+
+    <ul>
+      <%= 'No tasks yet.' unless category.tasks.find { |t| t.priority == Date.today } %>
+
+      <% category.tasks.each do |task| %>
+        <% if task.priority == Date.today %>
+          <li><%= task.details %></li>
+        <% end %>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
+
+<h2>Categories</h2>
+<p><%= 'Create a new category now!' if @categories.count.zero? %></p>
+
 <ul class="list-group">
   <% @categories.each do |category| %>
     <li class="list-group-item"><%= link_to category.title, category %> - <%= category.details %></li>
