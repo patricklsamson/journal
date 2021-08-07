@@ -77,7 +77,7 @@ RSpec.describe 'EditingTasks', type: :system do
       expect(page).to have_current_path(category_task_path(category_id, task_id))
     end
 
-    context 'with title blank' do
+    context 'with details blank' do
       it 'raises an error' do
         expect(page).to have_content('blank')
       end
