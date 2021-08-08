@@ -1,41 +1,31 @@
 require 'rails_helper'
 
 RSpec.describe Task, type: :model do
-  let(:date_today) { Date.today }
-  let(:date_yesterday) { date_today - 1 }
-
-  let(:category_create) do
+  let(:category) do
     Category.create(title: 'Category Title',
                     details: 'Category Details')
   end
 
   subject do
     described_class.new(details: 'Task Details',
-                        priority: date_today,
-                        category_id: category_create.id)
+                        priority: Date.today,
+                        category_id: category.id)
   end
 
-  let(:task_count) { Task.count }
-  let(:task_on_category) { Task.reflect_on_association(:category).macro }
-
-  let(:task_create) do
-    Task.create(details: subject.details,
-                priority: subject.priority,
-                category_id: subject.category_id)
-  end
-
-  before :each do
-    category_create
+  before do
+    category
   end
 
   context 'when initialized' do
+    let(:subject_count) { Task.count }
+
     it 'counts to zero to begin with' do
-      expect(task_count).to eq 0
+      expect(subject_count).to eq 0
     end
 
     it 'counts to one after adding one' do
-      task_create
-      expect(task_count).to eq 1
+      subject.save
+      expect(subject_count).to eq 1
     end
   end
 
@@ -53,8 +43,13 @@ RSpec.describe Task, type: :model do
   end
 
   context 'when details is not unique' do
+    before do
+      Task.create(details: subject.details,
+                  priority: subject.priority,
+                  category_id: subject.category_id)
+    end
+
     it 'does not validate' do
-      task_create
       subject.details = 'Task Details'
       expect(subject).to_not be_valid
     end
@@ -76,14 +71,14 @@ RSpec.describe Task, type: :model do
 
   context 'when priority date is in the past' do
     it 'does not validate' do
-      subject.priority = date_yesterday
+      subject.priority -= 10
       expect(subject).to_not be_valid
     end
   end
 
   context 'with associations' do
     it 'belongs to a category' do
-      expect(task_on_category).to eq :belongs_to
+      expect(Task.reflect_on_association(:category).macro).to eq :belongs_to
     end
   end
 
