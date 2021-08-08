@@ -5,17 +5,19 @@ RSpec.describe 'ViewingTasks', type: :system do
     driven_by(:rack_test)
   end
 
-  let(:date_today) { Date.today }
+  let(:category) { Category.create(title: 'Category Title', details: 'Category Details') }
+  let(:click_show_category) { find("a[href='/categories/#{category.id}']").click }
 
-  let(:category_create) { Category.create(title: 'Category Title', details: 'Category Details') }
-  let(:category_id) { Category.find_by(title: 'Category Title').id }
+  let(:task_yesterday) do
+    Task.new(details: 'Task Details', priority: Date.yesterday,
+             category_id: category.id).save(validate: false)
+  end
 
-  let(:task_create) { Task.create(details: 'Task Details', priority: date_today, category_id: category_id) }
-
-  let(:click_show_category) { find("a[href='/categories/#{category_id}']").click }
+  let(:task_today) { Task.create(details: 'Task Details', priority: Date.today, category_id: category.id) }
+  let(:task_tomorrow) { Task.create(details: 'Task Details', priority: Date.tomorrow, category_id: category.id) }
 
   context 'when navigating in page of all categories' do
-    before :each do
+    before do
       visit categories_path
     end
 
@@ -30,9 +32,9 @@ RSpec.describe 'ViewingTasks', type: :system do
     end
 
     context 'when a task for today was created' do
-      before :each do
-        category_create
-        task_create
+      before do
+        category
+        task_today
       end
 
       it 'shows heading' do
@@ -46,13 +48,13 @@ RSpec.describe 'ViewingTasks', type: :system do
   end
 
   context 'when navigating through tasks inside a category' do
-    before :each do
-      category_create
+    before do
+      category
       visit categories_path
     end
 
     context 'when there are no tasks yet' do
-      before :each do
+      before do
         click_show_category
       end
 
@@ -88,18 +90,52 @@ RSpec.describe 'ViewingTasks', type: :system do
     end
 
     context 'when a task for today was created' do
-      before :each do
-        task_create
+      before do
+        task_today
         click_show_category
       end
 
       it 'redirects to its category' do
-        expect(page).to have_current_path(category_path(category_id))
+        expect(page).to have_current_path(category_path(category))
       end
 
       context 'when navigating under "Tasks for Today"' do
         it 'shows created task' do
           within('#today-wrap') { expect(page).to have_content('Task Details') }
+        end
+      end
+    end
+
+    context 'when a future task was created' do
+      before do
+        task_tomorrow
+        click_show_category
+      end
+
+      it 'redirects to its category' do
+        expect(page).to have_current_path(category_path(category))
+      end
+
+      context 'when navigating under "Future Tasks"' do
+        it 'shows created task' do
+          within('#future-wrap') { expect(page).to have_content('Task Details') }
+        end
+      end
+    end
+
+    context 'when a task was overdue' do
+      before do
+        task_yesterday
+        click_show_category
+      end
+
+      it 'redirects to its category' do
+        expect(page).to have_current_path(category_path(category))
+      end
+
+      context 'when navigating under "Overdue Tasks"' do
+        it 'shows created task' do
+          within('#overdue-wrap') { expect(page).to have_content('Task Details') }
         end
       end
     end
