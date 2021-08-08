@@ -24,6 +24,7 @@ RSpec.describe 'Categories', type: :request do
 
   subject { Category.create(valid_attributes) }
   let(:category_invalid) { Category.create(invalid_attributes) }
+  let(:category_updated) { Category.find_by(new_attributes) }
   let(:category_count) { Category.count }
 
   describe 'GET /index' do
@@ -104,6 +105,10 @@ RSpec.describe 'Categories', type: :request do
         patch category_path(subject), params: { category: new_attributes }
       end
 
+      it 'updates category' do
+        expect(category_updated).to_not eq nil
+      end
+
       it 'redirects to itself' do
         expect(response).to redirect_to(category_path(subject))
       end
@@ -112,6 +117,10 @@ RSpec.describe 'Categories', type: :request do
     context 'when invalid' do
       before do
         patch category_path(subject), params: { category: invalid_attributes }
+      end
+
+      it 'does not update category' do
+        expect(category_updated).to eq nil
       end
 
       it 'responds successfully' do
