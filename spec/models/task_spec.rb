@@ -1,9 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe Task, type: :model do
+  let(:date_today) { Date.today }
+  let(:date_yesterday) { date_today - 1 }
+
   let(:category_create) do
     Category.create(title: 'Category Title',
                     details: 'Category Details')
+  end
+
+  subject do
+    described_class.new(details: 'Task Details',
+                        priority: date_today,
+                        category_id: category_create.id)
   end
 
   let(:task_count) { Task.count }
@@ -15,17 +24,8 @@ RSpec.describe Task, type: :model do
                 category_id: subject.category_id)
   end
 
-  let(:date_today) { Date.today }
-  let(:date_yesterday) { date_today - 1 }
-
   before :each do
     category_create
-  end
-
-  subject do
-    described_class.new(details: 'Task Details',
-                        priority: date_today,
-                        category_id: category_create.id)
   end
 
   context 'when initialized' do
