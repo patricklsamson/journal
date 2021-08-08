@@ -41,6 +41,7 @@ RSpec.describe 'Tasks', type: :request do
   end
 
   let(:task_invalid) { Task.create(invalid_attributes) }
+  let(:task_updated) { Task.find_by(new_attributes) }
   let(:task_count) { Task.count }
 
   before :each do
@@ -91,29 +92,45 @@ RSpec.describe 'Tasks', type: :request do
   end
 
   describe 'PATCH /update' do
-    before :each do
-      patch category_path(category_id), params: { category: category_attributes }
-    end
-
     context 'when valid' do
-      it 'redirects to itself' do
+      before do
         patch category_task_path(category_id, subject), params: { task: new_attributes }
+      end
+
+      it 'updates task' do
+        expect(task_updated).to_not eq nil
+      end
+
+      it 'redirects to itself' do
         expect(response).to redirect_to(category_path(category_id))
       end
     end
 
     context 'when invalid' do
-      it 'responds successfully' do
+      before do
         patch category_task_path(category_id, subject), params: { task: invalid_attributes }
+      end
+
+      it 'does not update task' do
+        expect(task_updated).to eq nil
+      end
+
+      it 'responds successfully' do
         expect(response).to be_successful
       end
     end
   end
 
   describe 'DELETE /destroy' do
-    it 'redirects to root path' do
+    before :each do
       delete category_task_path(category_id, subject)
+    end
+
+    it 'deletes the task' do
       expect(task_count).to eq 0
+    end
+
+    it 'redirects to root path' do
       expect(response).to redirect_to(category_path(category_id))
     end
   end
