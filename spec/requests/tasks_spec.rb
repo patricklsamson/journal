@@ -22,6 +22,8 @@ RSpec.describe 'Tasks', type: :request do
     }
   end
 
+  subject { Task.create(valid_attributes) }
+
   let(:invalid_attributes) do
     {
       details: nil,
@@ -38,7 +40,6 @@ RSpec.describe 'Tasks', type: :request do
     }
   end
 
-  subject { Task.create(valid_attributes) }
   let(:task_invalid) { Task.create(invalid_attributes) }
   let(:task_count) { Task.count }
 
