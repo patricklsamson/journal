@@ -6,22 +6,16 @@ RSpec.describe Category, type: :model do
                         details: 'Category Details')
   end
 
-  let(:category_count) { Category.count }
-  let(:category_on_tasks) { Category.reflect_on_association(:tasks).macro }
-
-  let(:category_create) do
-    Category.create(title: subject.title,
-                    details: subject.details)
-  end
-
   context 'when initialized' do
+    let(:subject_count) { Category.count }
+
     it 'counts to zero to begin with' do
-      expect(category_count).to eq 0
+      expect(subject_count).to eq 0
     end
 
     it 'counts to one after adding one' do
-      category_create
-      expect(category_count).to eq 1
+      subject.save
+      expect(subject_count).to eq 1
     end
   end
 
@@ -39,8 +33,12 @@ RSpec.describe Category, type: :model do
   end
 
   context 'when title is not unique' do
+    before do
+      Category.create(title: 'Category Title',
+                      details: 'Category Details')
+    end
+
     it 'does not validate' do
-      category_create
       subject.title = 'Category Title'
       expect(subject).to_not be_valid
     end
@@ -55,7 +53,7 @@ RSpec.describe Category, type: :model do
 
   context 'with associations' do
     it 'has many tasks' do
-      expect(category_on_tasks).to eq :has_many
+      expect(Category.reflect_on_association(:tasks).macro).to eq :has_many
     end
   end
 
