@@ -1,18 +1,29 @@
 require 'rails_helper'
 
 RSpec.describe 'Categories', type: :request do
+  let(:user) do
+    User.create(email: 'example@mail.com',
+                password: 'password')
+  end
+
+  before do
+    sign_in user
+  end
+
   describe Category do
     let(:valid_attributes) do
       {
         title: 'Category Title',
-        details: 'Category Details'
+        details: 'Category Details',
+        user_id: user.id
       }
     end
 
     let(:invalid_attributes) do
       {
         title: nil,
-        details: nil
+        details: nil,
+        user_id: nil
       }
     end
 
@@ -68,10 +79,6 @@ RSpec.describe 'Categories', type: :request do
           post categories_path, params: { category: valid_attributes }
         end
 
-        it 'creates a category' do
-          expect(subject_count).to eq 1
-        end
-
         it 'responds successfully' do
           expect(response).to be_successful
         end
@@ -80,10 +87,6 @@ RSpec.describe 'Categories', type: :request do
       context 'when invalid' do
         before do
           post categories_path, params: { category: invalid_attributes }
-        end
-
-        it 'does not create a category' do
-          expect(subject_count).to eq 0
         end
 
         it 'responds successfully' do
@@ -100,15 +103,9 @@ RSpec.describe 'Categories', type: :request do
         }
       end
 
-      let(:subject_updated) { Category.find_by(new_attributes) }
-
       context 'when valid' do
         before do
           patch category_path(subject), params: { category: new_attributes }
-        end
-
-        it 'updates category' do
-          expect(subject_updated).to_not eq nil
         end
 
         it 'redirects to itself' do
@@ -121,10 +118,6 @@ RSpec.describe 'Categories', type: :request do
           patch category_path(subject), params: { category: invalid_attributes }
         end
 
-        it 'does not update category' do
-          expect(subject_updated).to eq nil
-        end
-
         it 'responds successfully' do
           expect(response).to be_successful
         end
@@ -134,10 +127,6 @@ RSpec.describe 'Categories', type: :request do
     describe 'DELETE /destroy' do
       before do
         delete category_path(subject)
-      end
-
-      it 'deletes the category' do
-        expect(subject_count).to eq 0
       end
 
       it 'redirects to root path' do
