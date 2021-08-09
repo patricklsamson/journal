@@ -26,6 +26,25 @@ RSpec.describe Category, type: :model do
     end
   end
 
+  context 'with dependents' do
+    let(:task) do
+      Task.create(details: 'Task Details',
+                  priority: Date.today,
+                  user_id: user.id,
+                  category_id: subject.id)
+    end
+
+    before do
+      subject.save
+      task
+      subject.destroy
+    end
+
+    it 'deletes its tasks' do
+      expect(Task.count).to eq 0
+    end
+  end
+
   context 'with valid attributes' do
     it 'does validate' do
       expect(subject).to be_valid
