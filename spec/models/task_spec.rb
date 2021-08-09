@@ -1,31 +1,36 @@
 require 'rails_helper'
 
 RSpec.describe Task, type: :model do
+  let(:user) do
+    User.create(email: 'example@mail.com',
+                password: 'password')
+  end
+
   let(:category) do
     Category.create(title: 'Category Title',
-                    details: 'Category Details')
+                    details: 'Category Details',
+                    user_id: user.id)
   end
 
   subject do
     described_class.new(details: 'Task Details',
                         priority: Date.today,
+                        user_id: user.id,
                         category_id: category.id)
   end
 
   before do
+    user
     category
   end
 
-  context 'when initialized' do
-    let(:subject_count) { Task.count }
-
-    it 'counts to zero to begin with' do
-      expect(subject_count).to eq 0
+  context 'with associations' do
+    it 'belongs to a user' do
+      expect(Task.reflect_on_association(:user).macro).to eq :belongs_to
     end
 
-    it 'counts to one after adding one' do
-      subject.save
-      expect(subject_count).to eq 1
+    it 'belongs to a category' do
+      expect(Task.reflect_on_association(:category).macro).to eq :belongs_to
     end
   end
 
@@ -36,8 +41,11 @@ RSpec.describe Task, type: :model do
   end
 
   context 'without details' do
-    it 'does not validate' do
+    before do
       subject.details = nil
+    end
+
+    it 'does not validate' do
       expect(subject).to_not be_valid
     end
   end
@@ -46,39 +54,44 @@ RSpec.describe Task, type: :model do
     before do
       Task.create(details: subject.details,
                   priority: subject.priority,
+                  user_id: subject.user_id,
                   category_id: subject.category_id)
+
+      subject.details = subject.details
     end
 
     it 'does not validate' do
-      subject.details = 'Task Details'
       expect(subject).to_not be_valid
     end
   end
 
   context 'when details is less than 10 characters' do
-    it 'does not validate' do
+    before do
       subject.details = 'A' * 9
+    end
+
+    it 'does not validate' do
       expect(subject).to_not be_valid
     end
   end
 
   context 'without priority date' do
-    it 'does validate' do
+    before do
       subject.priority = nil
+    end
+
+    it 'does validate' do
       expect(subject).to be_valid
     end
   end
 
   context 'when priority date is in the past' do
-    it 'does not validate' do
+    before do
       subject.priority -= 10
-      expect(subject).to_not be_valid
     end
-  end
 
-  context 'with associations' do
-    it 'belongs to a category' do
-      expect(Task.reflect_on_association(:category).macro).to eq :belongs_to
+    it 'does not validate' do
+      expect(subject).to_not be_valid
     end
   end
 
