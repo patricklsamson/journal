@@ -1,33 +1,45 @@
-<h1>Journal</h1>
+<% if user_signed_in? %>
+  <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
 
-<div id="today-wrap">
-  <h2>Tasks for Today</h2>
-  <p><%= 'No tasks for today.' unless @categories.find { |c| c.tasks.find { |t| t.priority == Date.today} } %></p>
+  <div id="today-wrap">
+    <h2>Tasks for Today</h2>
+    <p><%= 'No tasks for today.' unless @categories.find { |c| c.tasks.find { |t| t.priority == Date.today && t.user == current_user } } %></p>
 
-  <% @categories.each do |category| %>
-    <h3><%= category.title %></h3>
+    <% @categories.each do |category| %>
+      <% if category.user == current_user %>
+        <h3><%= category.title %></h3>
 
-    <ul>
-      <%= 'No tasks yet.' unless category.tasks.find { |t| t.priority == Date.today } %>
+        <ul>
+          <%= 'No tasks yet.' unless category.tasks.find { |t| t.priority == Date.today } %>
 
-      <% category.tasks.each do |task| %>
-        <% if task.priority == Date.today %>
-          <li><%= task.details %></li>
-        <% end %>
+          <% category.tasks.each do |task| %>
+            <% if task.priority == Date.today %>
+              <li><%= task.details %></li>
+            <% end %>
+          <% end %>
+        </ul>
       <% end %>
-    </ul>
-  <% end %>
-</div>
+    <% end %>
+  </div>
 
-<h2>Categories</h2>
-<p><%= 'Create a new category now!' if @categories.count.zero? %></p>
+  <h2>Categories</h2>
 
-<ul class="list-group">
-  <% @categories.each do |category| %>
-    <li class="list-group-item"><%= link_to category.title, category %> - <%= category.details %></li>
-  <% end %>
-</ul>
+  <p><%= 'Create a new category now!' unless @categories.find { |c| c.user == current_user } %></p>
 
-<div>
-  <%= link_to 'New Category', new_category_path %>
-</div>
+  <ul class="list-group">
+    <% @categories.each do |category| %>
+      <% if category.user == current_user %>
+        <li class="list-group-item"><%= link_to category.title, category %> - <%= category.details %></li>
+      <% end %>
+    <% end %>
+  </ul>
+
+  <div>
+    <%= link_to 'New Category', new_category_path %>
+  </div>
+<% else %>
+  <p>
+    Please <%= link_to 'log in', new_user_session_path %> to start building your journal!
+    Or click <%= link_to 'here', new_user_registration_path %> if you don't have an account yet.
+  </p>
+<% end %>
