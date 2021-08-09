@@ -1,4 +1,6 @@
 class CategoriesController < ApplicationController
+  before_action :authenticate_user!, except: :index
+
   def index
     @categories = Category.all
   end
@@ -9,6 +11,7 @@ class CategoriesController < ApplicationController
 
   def create
     @category = Category.new(category_params)
+    @category.update(user_id: current_user.id)
 
     if @category.save
       redirect_to @category
@@ -45,6 +48,6 @@ class CategoriesController < ApplicationController
   private
 
   def category_params
-    params.require(:category).permit(:title, :details)
+    params.require(:category).permit(:title, :details, :user_id)
   end
 end
