@@ -1,13 +1,13 @@
 <%= form_with model: @category do |f| %>
-  <div>
-    <% if @category.errors.any? %>
+  <% if @category.errors.any? %>
+    <div>
       <ul>
         <% @category.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
       </ul>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 
   <div>
     <%= f.label :title %>
