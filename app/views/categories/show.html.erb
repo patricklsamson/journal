@@ -21,14 +21,18 @@
 </div>
 
 <div id="today-wrap">
-  <h2>Tasks for Today</h2>
+  <h2>Tasks for Today - <%= Date.today.strftime('%a, %d %b %Y') %></h2>
 
   <ul>
     <%= 'Nothing else here yet.' unless @category.tasks.find { |t| t.priority == Date.today } %>
 
     <% @category.tasks.each do |task| %>
       <% if task.priority == Date.today %>
-        <%= render task %>
+        <li><%= task.details %> -
+          <%= link_to 'Edit', edit_category_task_path(@category, task) %> -
+          <%= link_to 'Delete', [task.category, task],
+                          method: :delete,
+                          data: { confirm: 'Are you sure?' } %></li>
       <% end %>
     <% end %>
   </ul>
