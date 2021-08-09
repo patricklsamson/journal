@@ -1,60 +1,44 @@
 require 'rails_helper'
 
 RSpec.describe 'ViewingCategories', type: :system do
+  let(:user) do
+    User.create(email: 'example@mail.com',
+                password: 'password')
+  end
+
   before do
     driven_by(:rack_test)
+
+    sign_in user
   end
 
   describe Category do
     subject do
       described_class.create(title: 'Category Title',
-                             details: 'Category Details')
+                             details: 'Category Details',
+                             user_id: user.id)
+    end
+
+    before do
+      subject
+      visit categories_path
     end
 
     context 'when navigating in page of all categories' do
-      context 'when there are no categories yet' do
-        before do
-          visit categories_path
-        end
+      it 'shows category' do
+        expect(page).to have_content(subject.title)
+        expect(page).to have_content(subject.details)
+      end
+    end
 
-        it 'shows heading' do
-          expect(page).to have_content('Categories')
-        end
-
-        it 'shows "create" message' do
-          expect(page).to have_content('Create a new category now!')
-        end
+    context 'when accessing a category' do
+      before do
+        find("a[href='/categories/#{subject.id}']").click
       end
 
-      context 'when a category was created' do
-        before do
-          subject
-          visit categories_path
-        end
-
-        it 'shows created category' do
-          expect(page).to have_content('Category Title')
-          expect(page).to have_content('Category Details')
-        end
-
-        it 'does not show "create" message' do
-          expect(page).to_not have_content('Create a new category now!')
-        end
-
-        context 'when viewing that category created' do
-          before do
-            find("a[href='/categories/#{subject.id}']").click
-          end
-
-          it 'goes to the category' do
-            expect(page).to have_current_path(category_path(subject))
-          end
-
-          it 'renders page with its contents' do
-            expect(page).to have_content('Category Title')
-            expect(page).to have_content('Category Details')
-          end
-        end
+      it 'shows category' do
+        expect(page).to have_content(subject.title)
+        expect(page).to have_content(subject.details)
       end
     end
   end
