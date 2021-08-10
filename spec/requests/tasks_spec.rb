@@ -127,11 +127,11 @@ RSpec.describe 'Tasks', type: :request do
 
     describe 'DELETE /destroy' do
       before do
-        delete category_task_path(category, subject)
+        delete category_task_url(category, subject)
       end
 
-      it 'redirects to root path' do
-        expect(response).to redirect_to(category_path(category))
+      it 'redirects to all categories' do
+        expect(response).to redirect_to(category_url(category))
       end
     end
   end
