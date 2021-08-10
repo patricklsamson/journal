@@ -28,11 +28,10 @@ RSpec.describe 'Categories', type: :request do
     end
 
     subject { described_class.create(valid_attributes) }
-    let(:subject_count) { Category.count }
 
     describe 'GET /index' do
       before do
-        get categories_path
+        get categories_url
       end
 
       it 'responds successfully' do
@@ -44,7 +43,7 @@ RSpec.describe 'Categories', type: :request do
 
     describe 'GET /show' do
       before do
-        get category_path(subject)
+        get category_url(subject)
       end
 
       it 'responds successfully' do
@@ -54,7 +53,7 @@ RSpec.describe 'Categories', type: :request do
 
     describe 'GET /new' do
       before do
-        get new_category_path
+        get new_category_url
       end
 
       it 'responds successfully' do
@@ -64,7 +63,7 @@ RSpec.describe 'Categories', type: :request do
 
     describe 'GET /edit' do
       before do
-        get edit_category_path(subject)
+        get edit_category_url(subject)
       end
 
       it 'responds successfully' do
@@ -75,18 +74,17 @@ RSpec.describe 'Categories', type: :request do
     describe 'POST /create' do
       context 'when valid' do
         before do
-          subject
-          post categories_path, params: { category: valid_attributes }
+          post categories_url, params: { category: valid_attributes }
         end
 
         it 'responds successfully' do
-          expect(response).to be_successful
+          expect(response).to redirect_to(category_url(Category.find_by(valid_attributes)))
         end
       end
 
       context 'when invalid' do
         before do
-          post categories_path, params: { category: invalid_attributes }
+          post categories_url, params: { category: invalid_attributes }
         end
 
         it 'responds successfully' do
@@ -105,11 +103,11 @@ RSpec.describe 'Categories', type: :request do
 
       context 'when valid' do
         before do
-          patch category_path(subject), params: { category: new_attributes }
+          patch category_url(subject), params: { category: new_attributes }
         end
 
         it 'redirects to itself' do
-          expect(response).to redirect_to(category_path(subject))
+          expect(response).to redirect_to(category_url(subject))
         end
       end
 
@@ -126,11 +124,11 @@ RSpec.describe 'Categories', type: :request do
 
     describe 'DELETE /destroy' do
       before do
-        delete category_path(subject)
+        delete category_url(subject)
       end
 
       it 'redirects to root path' do
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(categories_url)
       end
     end
   end
