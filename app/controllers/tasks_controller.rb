@@ -10,6 +10,7 @@ class TasksController < ApplicationController
     @category = Category.find(params[:category_id])
     @task = @category.tasks.create(task_params)
     @task.update(user_id: current_user.id)
+
     redirect_to category_path(@category)
   end
 
@@ -28,6 +29,7 @@ class TasksController < ApplicationController
     @category = Category.find(params[:category_id])
     @task = @category.tasks.find(params[:id])
     @task.destroy
+
     redirect_to category_path(@category)
   end
 
