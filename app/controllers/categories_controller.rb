@@ -5,8 +5,16 @@ class CategoriesController < ApplicationController
     @categories = Category.all
   end
 
+  def show
+    @category = Category.find(params[:id])
+  end
+
   def new
     @category = Category.new
+  end
+
+  def edit
+    @category = Category.find(params[:id])
   end
 
   def create
@@ -18,14 +26,6 @@ class CategoriesController < ApplicationController
     else
       render :new
     end
-  end
-
-  def show
-    @category = Category.find(params[:id])
-  end
-
-  def edit
-    @category = Category.find(params[:id])
   end
 
   def update
@@ -42,7 +42,7 @@ class CategoriesController < ApplicationController
     @category = Category.find(params[:id])
     @category.destroy
 
-    redirect_to root_path
+    redirect_to categories_url
   end
 
   private
