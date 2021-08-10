@@ -33,14 +33,14 @@ RSpec.describe User, type: :model do
     it 'deletes its categories' do
       category
       subject.destroy
-      expect(Category.count).to eq 0
+      expect(Category.find_by(user_id: subject.id)).to eq nil
     end
 
     it 'deletes its tasks' do
       category
       task
       subject.destroy
-      expect(Task.count).to eq 0
+      expect(Task.find_by(user_id: subject.id)).to eq nil
     end
   end
 
