@@ -77,7 +77,7 @@ RSpec.describe 'Categories', type: :request do
           post categories_url, params: { category: valid_attributes }
         end
 
-        it 'responds successfully' do
+        it 'redirects to itself' do
           expect(response).to redirect_to(category_url(Category.find_by(valid_attributes)))
         end
       end
@@ -113,7 +113,7 @@ RSpec.describe 'Categories', type: :request do
 
       context 'when invalid' do
         before do
-          patch category_path(subject), params: { category: invalid_attributes }
+          patch category_url(subject), params: { category: invalid_attributes }
         end
 
         it 'responds successfully' do
@@ -127,7 +127,7 @@ RSpec.describe 'Categories', type: :request do
         delete category_url(subject)
       end
 
-      it 'redirects to root path' do
+      it 'redirects to all categories' do
         expect(response).to redirect_to(categories_url)
       end
     end
