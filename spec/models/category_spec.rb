@@ -41,7 +41,7 @@ RSpec.describe Category, type: :model do
     end
 
     it 'deletes its tasks' do
-      expect(Task.count).to eq 0
+      expect(Task.find_by(category_id: subject.id)).to eq nil
     end
   end
 
