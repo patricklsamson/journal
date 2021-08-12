@@ -1,5 +1,7 @@
 # PUT IN ROOT OF ALL PROJECTS OR WORKS
 
+AllCops:
+  NewCops: enable
 Layout/EndOfLine:
   Enabled: false
   EnforcedStyle: lf
@@ -11,5 +13,3 @@ Style/Documentation:
   Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false
-AllCops:
-  NewCops: enable
