@@ -10,11 +10,11 @@
     "bootstrap": "5.0.2",
     "jquery-ui-dist": "^1.12.1",
     "turbolinks": "^5.2.0",
-    "webpack": "^4.46.0",
+    "webpack": "^5.51.1",
     "webpack-cli": "^3.3.12"
   },
   "version": "0.1.0",
   "devDependencies": {
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^4.1.0"
   }
 }
