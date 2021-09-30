@@ -1,7 +1,13 @@
 <%= form_with model: [@category, @category.tasks.build] do |f| %>
-  <%= f.label :details %>
-  <%= f.text_area :details %>
-  <%= f.label :priority, 'Priority Date' %>
-  <%= f.datetime_field :priority, id: 'datepicker', type: '' %>
-  <%= f.submit %>
+  <div class="form-floating d-inline-block w-50 align-middle">
+    <%= f.text_area :details, class: "form-control", placeholder: "Details" %>
+    <%= f.label :details %>
+  </div>
+
+  <div class="form-floating d-inline-block w-25 align-middle">
+    <%= f.datetime_field :priority, id: 'datepicker', type: '', class: "form-control", placeholder: "Details" %>
+    <%= f.label :priority, 'Priority Date' %>
+  </div>
+
+  <%= f.submit "Add Task", class: "btn btn-success ms-3" %>
 <% end %>
