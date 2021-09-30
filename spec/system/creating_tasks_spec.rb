@@ -24,8 +24,8 @@ RSpec.describe 'CreatingTasks', type: :system do
     category
     visit category_path(category)
 
-    fill_in 'Details', with: 'Task Details'
-    fill_in 'task[priority]', with: Date.today
+    fill_in 'task[details]', with: 'Task Details'
+    fill_in 'task[priority]', with: Date.current
     find('input[type="submit"]').click
   end
 
