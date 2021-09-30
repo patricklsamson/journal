@@ -16,7 +16,8 @@ RSpec.describe 'Tasks', type: :request do
     let(:valid_attributes) do
       {
         details: 'Task Details',
-        priority: Date.today,
+        priority: Date.current,
+        done: false,
         user_id: user.id,
         category_id: category.id
       }
@@ -26,6 +27,7 @@ RSpec.describe 'Tasks', type: :request do
       {
         details: nil,
         priority: nil,
+        done: nil,
         user_id: nil,
         category_id: nil
       }
@@ -101,7 +103,8 @@ RSpec.describe 'Tasks', type: :request do
         let(:new_attributes) do
           {
             details: 'Task Details Edited',
-            priority: Date.tomorrow
+            priority: Date.current.tomorrow,
+            done: true
           }
         end
 
@@ -110,8 +113,8 @@ RSpec.describe 'Tasks', type: :request do
             patch category_task_url(category, subject), params: { task: new_attributes }
           end
 
-          it 'redirects to itself' do
-            expect(response).to redirect_to(category_url(category))
+          it 'redirects to base url' do
+            expect(response).to redirect_to("#{request.base_url}/")
           end
         end
 
