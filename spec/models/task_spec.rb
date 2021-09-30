@@ -14,7 +14,8 @@ RSpec.describe Task, type: :model do
 
   subject do
     described_class.new(details: 'Task Details',
-                        priority: Date.today,
+                        priority: Date.current,
+                        done: false,
                         user_id: user.id,
                         category_id: category.id)
   end
@@ -26,11 +27,11 @@ RSpec.describe Task, type: :model do
 
   context 'with associations' do
     it 'belongs to a user' do
-      expect(Task.reflect_on_association(:user).macro).to eq :belongs_to
+      expect(described_class.reflect_on_association(:user).macro).to eq :belongs_to
     end
 
     it 'belongs to a category' do
-      expect(Task.reflect_on_association(:category).macro).to eq :belongs_to
+      expect(described_class.reflect_on_association(:category).macro).to eq :belongs_to
     end
   end
 
@@ -52,10 +53,13 @@ RSpec.describe Task, type: :model do
 
   context 'when details is not unique' do
     before do
-      Task.create(details: subject.details,
-                  priority: subject.priority,
-                  user_id: subject.user_id,
-                  category_id: subject.category_id)
+      described_class.create(
+        details: subject.details,
+        priority: subject.priority,
+        done: false,
+        user_id: subject.user_id,
+        category_id: subject.category_id
+      )
 
       subject.details = subject.details
     end
