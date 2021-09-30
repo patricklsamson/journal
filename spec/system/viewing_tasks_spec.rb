@@ -40,7 +40,7 @@ RSpec.describe 'ViewingTasks', type: :system do
 
     context 'when navigating inside a category' do
       before do
-        find("a[href='/categories/#{category.id}']").click
+        click_on 'Category Title'
       end
 
       it 'shows task' do
