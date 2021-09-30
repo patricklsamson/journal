@@ -19,7 +19,7 @@ class TasksController < ApplicationController
     @task = @category.tasks.find(params[:id])
 
     if @task.update(task_params)
-      redirect_to category_path(@category)
+      redirect_back(fallback_location: root_path)
     else
       render action: 'edit'
     end
@@ -36,6 +36,6 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:details, :priority, :user_id)
+    params.require(:task).permit(:details, :priority, :done, :user_id)
   end
 end
