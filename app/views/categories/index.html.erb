@@ -1,45 +1,59 @@
+<%= provide(:categories_active, 'active') %>
+
 <% if user_signed_in? %>
-  <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
-
-  <div id="today-wrap">
-    <h2>Tasks for Today</h2>
-    <p><%= 'No tasks for today.' unless @categories.find { |c| c.tasks.find { |t| t.priority == Date.today && t.user == current_user } } %></p>
-
-    <% @categories.each do |category| %>
-      <% if category.user == current_user %>
-        <h3><%= category.title %></h3>
-
-        <ul>
-          <%= 'No tasks yet.' unless category.tasks.find { |t| t.priority == Date.today } %>
-
-          <% category.tasks.each do |task| %>
-            <% if task.priority == Date.today %>
-              <li><%= task.details %></li>
-            <% end %>
-          <% end %>
-        </ul>
-      <% end %>
-    <% end %>
-  </div>
-
+  <%= link_to 'New Category', new_category_path, class: "btn btn-primary float-end" %>
   <h2>Categories</h2>
 
-  <p><%= 'Create a new category now!' unless @categories.find { |c| c.user == current_user } %></p>
+  <p><%= 'Create a new category now!' if @categories.count == 0 %></p>
 
   <ul class="list-group">
     <% @categories.each do |category| %>
-      <% if category.user == current_user %>
-        <li class="list-group-item"><%= link_to category.title, category %> - <%= category.details %></li>
-      <% end %>
-    <% end %>
-  </ul>
+      <% if cycle("odd", "even") == "odd" %>
+        <li class="list-group-item list-group-item-dark">
+        <% else %>
+          <li class="list-group-item">
+          <% end %>
+          <div class="float-end">
+            <%= link_to 'Edit', edit_category_path(category), class: "btn btn-outline-secondary" %> |
+            <%= link_to 'Delete', category_path(category),
+                                method: :delete,
+                                data: { confirm: 'Are you sure?' },
+                                class: "btn btn-outline-danger" %>
+          </div>
 
-  <div>
-    <%= link_to 'New Category', new_category_path %>
-  </div>
-<% else %>
-  <p>
-    Please <%= link_to 'log in', new_user_session_path %> to start building your journal!
-    Or click <%= link_to 'here', new_user_registration_path %> if you don't have an account yet.
-  </p>
-<% end %>
+          <h3><%= link_to category.title, category, class: "link-dark" %></h3>
+          <p><%= category.details %></p>
+
+          <div class="card mt-4">
+            <div class="card-body">
+              <%= link_to "Add a Task", category, class: "btn btn-success float-end" %>
+              <% if category.tasks.find { |t| t.priority == Date.current && t.user == current_user } %>
+                <h6>Tasks for Today - <%= Date.current.strftime('%a, %d %b %Y') %></h6>
+
+                <ul class="list-group mt-4">
+                  <% category.tasks.each do |task| %>
+                    <% if task.priority == Date.current %>
+                      <% if cycle("odd", "even") == "odd" %>
+                        <li class="list-group-item list-group-item-secondary">
+                        <% else %>
+                          <li class="list-group-item">
+                          <% end %>
+                          <%= render "tasks/done_form", task: task, category: category %>
+                        </li>
+                      <% end %>
+                    <% end %>
+                  </ul>
+                <% else %>
+                  <h6>No tasks for today.</h6>
+                <% end %>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="fs-2">
+        Please <%= link_to 'log in', new_user_session_path, class: "link-success" %> to start building your journal!
+        Or click <%= link_to 'here', new_user_registration_path, class: "link-secondary" %> if you don't have an account yet.
+      </p>
+    <% end %>
