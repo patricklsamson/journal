@@ -33,7 +33,7 @@ RSpec.describe 'ViewingCategories', type: :system do
 
     context 'when accessing a category' do
       before do
-        find("a[href='/categories/#{subject.id}']").click
+        click_on 'Category Title'
       end
 
       it 'shows category' do
