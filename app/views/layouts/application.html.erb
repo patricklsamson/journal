@@ -13,11 +13,19 @@
   </head>
 
   <body>
+    <%= render 'layouts/navbar'  %>
+
     <main>
       <div class="container">
-        <p class="notice"><%= notice %></p>
-        <p class="alert"><%= alert %></p>
-        <%= yield %>
+        <% if notice %>
+          <p class="notice alert alert-info w-75 mx-auto"><%= notice %></p>
+        <% elsif alert %>
+          <p class="alert alert-warning w-75 mx-auto"><%= alert %></p>
+        <% end %>
+
+        <div class="w-75 mx-auto">
+          <%= yield %>
+        </div>
       </div>
     </main>
   </body>
