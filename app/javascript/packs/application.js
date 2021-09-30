@@ -10,7 +10,7 @@ import "channels";
 
 import "bootstrap";
 import "jquery-ui";
-import "packs/custom";
+import "packs/head";
 
 Rails.start();
 // Turbolinks.start();
