@@ -1,0 +1,17 @@
+<%= form_with model: [task.category, task], method: :patch do |f| %>
+  <% if task.done? %>
+    <%= f.check_box :done, checked: true, class: "btn-done form-check-input me-2" %>
+  <% else %>
+    <%= f.check_box :done, class: "btn-done form-check-input me-2" %>
+  <% end %>
+
+  <span><%= task.details %></span>
+
+  <div class="float-end">
+    <%= link_to 'Edit', edit_category_task_path(category, task), class: "btn btn-outline-secondary" %> |
+    <%= link_to 'Delete', [task.category, task],
+                          method: :delete,
+                          data: { confirm: 'Are you sure?' },
+                          class: "btn btn-outline-danger" %>
+  </div>
+<% end %>
