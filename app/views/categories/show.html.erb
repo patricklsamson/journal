@@ -1,55 +1,92 @@
-<h1><%= @category.title %></h1>
-<p><%= @category.details %></p>
-<%= link_to 'Edit', edit_category_path(@category) %>
-
-<%= link_to 'Delete', category_path(@category),
+<div class="card">
+  <div class="card-header">
+    <div class="float-end">
+      <%= link_to 'Edit', edit_category_path(@category), class: "btn btn-outline-secondary" %> |
+      <%= link_to 'Delete', category_path(@category),
                       method: :delete,
-                      data: { confirm: 'Are you sure?' } %>
+                      data: { confirm: 'Are you sure?' },
+                      class: "btn btn-outline-danger" %>
+    </div>
 
-<div id="overdue-wrap">
-  <h2>Overdue Tasks</h2>
+    <h1 class="card-title"><%= @category.title %></h1>
+    <p class="card-text"><%= @category.details %></p>
+  </div>
 
-  <ul>
-    <%= 'Nothing else here yet.' unless @category.tasks.find { |t| t.priority < Date.today } %>
+  <div class="card-body">
+    <div id="task-accordion" class="accordion">
+      <div class="accordion-item">
+        <h2 id="overdue-title" class="accordion-header">
+          <button class="accordion-button collapsed h2 fs-4 mb-0" type="button" data-bs-toggle="collapse" data-bs-target="#overdue-wrap" aria-expanded="true" aria-controls="overdue-wrap">
+            Overdued Tasks
 
-    <% @category.tasks.each do |task| %>
-      <% if task.priority < Date.today %>
-        <%= render task %>
-      <% end %>
-    <% end %>
-  </ul>
+            <% if @category.tasks.find { |t| t.priority <= Date.current.yesterday } %>
+              <span class="text-danger fs-6 ms-3">You have overdued tasks!</span>
+            <% end %>
+          </button>
+        </h2>
+
+        <div id="overdue-wrap" class="accordion-collapse collapse" aria-labelledby="overdue-title" data-bs-parent="#task-accordion">
+          <ul class="list-group">
+            <% unless @category.tasks.find { |t| t.priority <= Date.current.yesterday } %>
+              <li class="list-group-item">Nothing else here yet.</li>
+            <% end %>
+
+            <% @category.tasks.each do |task| %>
+              <% if task.priority <= Date.current.yesterday %>
+                <%= render task %>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 id="today-title" class="accordion-header">
+          <button class="accordion-button h2 fs-4 mb-0" type="button" data-bs-toggle="collapse" data-bs-target="#today-wrap" aria-expanded="false" aria-controls="today-wrap">
+            Tasks for Today - <%= Date.current.strftime('%a, %d %b %Y') %>
+          </button>
+        </h2>
+
+        <div id="today-wrap" class="accordion-collapse collapse show" aria-labelledby="today-title" data-bs-parent="#task-accordion">
+          <ul class="list-group">
+            <% unless @category.tasks.find { |t| t.priority == Date.current } %>
+              <li class="list-group-item">Nothing else here yet.</li>
+            <% end %>
+
+            <% @category.tasks.each do |task| %>
+              <% if task.priority == Date.current %>
+                <%= render task %>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 id="future-title" class="accordion-header">
+          <button class="accordion-button collapsed h2 fs-4 mb-0" type="button" data-bs-toggle="collapse" data-bs-target="#future-wrap" aria-expanded="false" aria-controls="future-wrap">
+            Future Tasks
+          </button>
+        </h2>
+
+        <div id="future-wrap" class="accordion-collapse collapse" aria-labelledby="future-title" data-bs-parent="#task-accordion">
+          <ul class="list-group">
+            <% unless @category.tasks.find { |t| t.priority >= Date.current.tomorrow } %>
+              <li class="list-group-item">Nothing else here yet.</li>
+            <% end %>
+
+            <% @category.tasks.each do |task| %>
+              <% if task.priority >= Date.current.tomorrow %>
+                <%= render task %>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <%= render 'tasks/form' %>
+  </div>
 </div>
-
-<div id="today-wrap">
-  <h2>Tasks for Today - <%= Date.today.strftime('%a, %d %b %Y') %></h2>
-
-  <ul>
-    <%= 'Nothing else here yet.' unless @category.tasks.find { |t| t.priority == Date.today } %>
-
-    <% @category.tasks.each do |task| %>
-      <% if task.priority == Date.today %>
-        <li><%= task.details %> -
-          <%= link_to 'Edit', edit_category_task_path(@category, task) %> -
-          <%= link_to 'Delete', [task.category, task],
-                          method: :delete,
-                          data: { confirm: 'Are you sure?' } %></li>
-      <% end %>
-    <% end %>
-  </ul>
-</div>
-
-<div id="future-wrap">
-  <h2>Future Tasks</h2>
-
-  <ul>
-    <%= 'Nothing else here yet.' unless @category.tasks.find { |t| t.priority > Date.today } %>
-
-    <% @category.tasks.each do |task| %>
-      <% if task.priority > Date.today %>
-        <%= render task %>
-      <% end %>
-    <% end %>
-  </ul>
-</div>
-
-<%= render 'tasks/form' %>
