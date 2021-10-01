@@ -4,7 +4,7 @@
     <li class="list-group-item">
     <% end %>
 
-    <% if task.priority == Date.current %>
+    <% if task.priority <= Date.current %>
       <%= render "tasks/done_form", task: task, category: @category %>
     <% else %>
       <%= task.priority.strftime('%a, %d %b %Y') %> - <%= task.details %>
