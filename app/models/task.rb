@@ -6,7 +6,7 @@ class Task < ApplicationRecord
                       uniqueness: true,
                       length: { minimum: 10 }
 
-  validate :priority_date_cannot_be_in_the_past
+  validate :priority_date_cannot_be_in_the_past, on: :create
 
   def priority_date_cannot_be_in_the_past
     errors.add(:priority, "can't be in the past") if priority.present? && priority < Date.today
