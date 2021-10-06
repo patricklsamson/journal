@@ -61,10 +61,12 @@ rails db:create
 ```shell
 rails db:migrate
 rails db:seed
+```
 
-or
+or (skip "rails db:create")
 
-rails db:setup (skip "rails db:create")
+```shell
+rails db:setup
 ```
 
 ## How to run the Test Suite
