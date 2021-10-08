@@ -24,8 +24,14 @@
           <p class="alert alert-warning w-75 mx-auto"><%= alert %></p>
         <% end %>
 
-        <div class="w-75 mx-auto">
-          <%= yield %>
+        <div class="row justify-content-center">
+          <% if controller.controller_name == 'categories' %>
+            <div class="col-xl-8">
+              <%= yield %>
+            </div>
+          <% else %>
+            <%= yield %>
+          <% end %>
         </div>
       </div>
     </main>
