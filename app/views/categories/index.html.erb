@@ -13,7 +13,8 @@
         <% else %>
           <li class="list-group-item">
           <% end %>
-          <div class="float-end">
+
+          <div class="float-md-end text-end mb-3 mb-md-0">
             <%= link_to 'Edit', edit_category_path(category), class: "btn btn-outline-secondary" %> |
             <%= link_to 'Delete', category_path(category),
                                 method: :delete,
@@ -26,7 +27,10 @@
 
           <div class="card mt-4">
             <div class="card-body">
-              <%= link_to "Add a Task", category, class: "btn btn-success float-end" %>
+              <div class="float-sm-end text-end mb-2 mb-sm-0">
+                <%= link_to "Add a Task", category, class: "btn btn-success" %>
+              </div>
+
               <% if category.tasks.find { |t| t.priority == Date.current && t.user == current_user } %>
                 <h6>Tasks for Today - <%= Date.current.strftime('%a, %d %b %Y') %></h6>
 
